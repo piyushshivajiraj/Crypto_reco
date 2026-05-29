@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Crypto Reco — Leads CRM</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --blue:#3b5bf6; --grad:linear-gradient(110deg,#1f4fe0,#8a2be0);
+    --ink:#0b1020; --body:#5a6275; --muted:#8b91a3;
+    --line:#e9eaf2; --bg:#f5f6fb; --white:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:"Inter",system-ui,sans-serif;background:var(--bg);color:var(--body);-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.brand-name{font-family:"Plus Jakarta Sans",sans-serif;color:var(--ink);letter-spacing:-.02em;margin:0}
+  a{color:inherit}
+
+  /* top bar */
+  .top{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+  .top-in{max-width:1180px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .mark{width:34px;height:34px;border-radius:10px;background:var(--grad);display:grid;place-items:center;box-shadow:0 6px 14px rgba(82,60,237,.3)}
+  .mark svg{width:18px;height:18px}
+  .brand-name{font-size:18px;font-weight:800;white-space:nowrap;line-height:1.1}
+  .brand-name small{display:block;font-family:"Inter";font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:1px}
+  .top .btn{font-family:"Inter";font-size:13.5px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:9px 14px;cursor:pointer;transition:.15s}
+  .top .btn:hover{border-color:#c9cfe0}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 24px 60px}
+
+  /* gate */
+  .gate{min-height:70vh;display:grid;place-items:center}
+  .gate-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:36px;max-width:400px;width:100%;box-shadow:0 16px 50px rgba(16,24,40,.08);text-align:center}
+  .gate-card h2{font-size:22px;margin-bottom:8px}
+  .gate-card p{font-size:14.5px;margin:0 0 22px}
+  .gate-card input{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:11px;font-size:15px;font-family:"Inter";margin-bottom:14px}
+  .gate-card input:focus{outline:2px solid rgba(59,91,246,.4);border-color:transparent}
+  .gate-card button{width:100%;background:var(--grad);color:#fff;border:0;border-radius:11px;padding:14px;font-size:15px;font-weight:700;font-family:"Plus Jakarta Sans";cursor:pointer}
+  .err{color:#dc2626;font-size:13.5px;margin:0 0 14px;min-height:18px}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:24px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .stat .n{font-family:"Plus Jakarta Sans";font-weight:800;font-size:26px;color:var(--ink);line-height:1}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:6px;text-transform:capitalize}
+  .stat.is-new .n{color:var(--blue)}
+
+  /* toolbar */
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+  .toolbar h1{font-size:22px;font-weight:800}
+  .filters{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* table */
+  .table-card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:14px 18px;border-bottom:1px solid var(--line);background:#fafbff}
+  td{padding:15px 18px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  tr:hover td{background:#fafbff}
+  .lead-name{font-weight:700;color:var(--ink)}
+  .lead-email{font-size:13px;color:var(--blue);text-decoration:none}
+  .lead-needs{color:var(--body);max-width:340px;font-size:13.5px}
+  .when{font-size:12.5px;color:var(--muted);white-space:nowrap}
+
+  .pill{font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;display:inline-block}
+  .pill-new{background:#e8edff;color:#2f5cf0}
+  .pill-contacted{background:#fff4e0;color:#b45309}
+  .pill-qualified{background:#ede7ff;color:#6d3aed}
+  .pill-won{background:#dcfce7;color:#15803d}
+  .pill-lost{background:#fde8e8;color:#b91c1c}
+
+  select.status{font-family:"Inter";font-size:13px;font-weight:600;border:1px solid var(--line);border-radius:8px;padding:7px 9px;cursor:pointer;background:#fff;color:var(--ink)}
+
+  .empty{padding:60px 20px;text-align:center;color:var(--muted)}
+  .empty svg{width:40px;height:40px;color:#c7cbf3;margin:0 auto 12px}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:11px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:880px){
+    .stats{grid-template-columns:repeat(3,1fr)}
+    .lead-needs{max-width:none}
+    .hide-sm{display:none}
+  }
+  @media(max-width:520px){ .stats{grid-template-columns:repeat(2,1fr)} }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="12" width="3.4" height="7" rx="1" fill="#fff"/><rect x="10.3" y="8" width="3.4" height="11" rx="1" fill="#fff"/><rect x="16.6" y="5" width="3.4" height="14" rx="1" fill="#fff" opacity=".85"/></svg></span>
+      <span class="brand-name">Crypto Reco<small>Leads CRM</small></span>
+    </div>
+    <button class="btn" id="logoutBtn" style="display:none">Sign out</button>
+  </div>
+</header>
+
+<!-- Auth gate -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <h2>Leads Dashboard</h2>
+    <p>Enter your admin access token to continue.</p>
+    <p class="err" id="gateErr"></p>
+    <input type="password" id="tokenInput" placeholder="Admin token" autocomplete="off" />
+    <button id="loginBtn">Access Dashboard</button>
+  </div>
+</div>
+
+<!-- App -->
+<main class="wrap" id="app" style="display:none">
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar">
+    <h1>Leads</h1>
+    <div class="filters" id="filters"></div>
+  </div>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Lead</th>
+          <th class="hide-sm">Company</th>
+          <th class="hide-sm">Needs</th>
+          <th>Status</th>
+          <th>Received</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      <div>No leads yet. Submissions from the website form will appear here.</div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = "cryptoreco_admin_token";
+  var STATUSES = ["new","contacted","qualified","won","lost"];
+  var state = { leads: [], filter: "all" };
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  function toast(msg){
+    var t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(t._t); t._t = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+  }
+
+  function token(){ return localStorage.getItem(KEY) || ""; }
+
+  // ---------- Auth ----------
+  function showApp(){
+    $("gate").style.display = "none";
+    $("app").style.display = "block";
+    $("logoutBtn").style.display = "inline-block";
+    load();
+  }
+  function showGate(msg){
+    $("gate").style.display = "grid";
+    $("app").style.display = "none";
+    $("logoutBtn").style.display = "none";
+    if (msg) $("gateErr").textContent = msg;
+  }
+
+  $("loginBtn").addEventListener("click", tryLogin);
+  $("tokenInput").addEventListener("keydown", function(e){ if(e.key==="Enter") tryLogin(); });
+  function tryLogin(){
+    var v = $("tokenInput").value.trim();
+    if(!v){ $("gateErr").textContent = "Please enter your token."; return; }
+    localStorage.setItem(KEY, v);
+    load(true);
+  }
+  $("logoutBtn").addEventListener("click", function(){
+    localStorage.removeItem(KEY); showGate("");
+  });
+
+  // ---------- Data ----------
+  function load(fromLogin){
+    if(!token()){ showGate(""); return; }
+    fetch("/api/leads", { headers: { "x-admin-token": token() } })
+      .then(function(r){
+        if(r.status === 401){ localStorage.removeItem(KEY); showGate("Invalid token. Try again."); throw new Error("401"); }
+        return r.json();
+      })
+      .then(function(data){
+        state.leads = data.leads || [];
+        showApp_render();
+      })
+      .catch(function(err){
+        if(String(err.message) === "401") return;
+        // Likely running without a backend (e.g. local preview)
+        if(fromLogin) showGate("");
+        showApp(); // still show shell
+        renderEmptyBackend();
+      });
+  }
+
+  function showApp_render(){
+    $("gate").style.display = "none";
+    $("app").style.display = "block";
+    $("logoutBtn").style.display = "inline-block";
+    renderStats(); renderFilters(); renderRows();
+  }
+
+  function renderEmptyBackend(){
+    $("stats").innerHTML = "";
+    $("rows").innerHTML = "";
+    $("empty").style.display = "block";
+    $("empty").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div>Backend not reachable. This dashboard works once deployed with the API + database connected.</div>';
+  }
+
+  // ---------- Render ----------
+  function counts(){
+    var c = { all: state.leads.length };
+    STATUSES.forEach(function(s){ c[s] = 0; });
+    state.leads.forEach(function(l){ if(c[l.status]!=null) c[l.status]++; });
+    return c;
+  }
+
+  function renderStats(){
+    var c = counts();
+    var cards = [["Total","all"]].concat(STATUSES.map(function(s){ return [s,s]; }));
+    $("stats").innerHTML = cards.map(function(pair){
+      var label = pair[0], k = pair[1];
+      return '<div class="stat '+(k==="new"?"is-new":"")+'"><div class="n">'+(c[k]||0)+'</div><div class="l">'+label+'</div></div>';
+    }).join("");
+  }
+
+  function renderFilters(){
+    var opts = ["all"].concat(STATUSES);
+    $("filters").innerHTML = opts.map(function(s){
+      return '<button class="chip '+(state.filter===s?"active":"")+'" data-f="'+s+'">'+(s==="all"?"All":cap(s))+'</button>';
+    }).join("");
+    Array.prototype.forEach.call($("filters").querySelectorAll(".chip"), function(b){
+      b.addEventListener("click", function(){ state.filter = b.getAttribute("data-f"); renderFilters(); renderRows(); });
+    });
+  }
+
+  function renderRows(){
+    var list = state.leads.filter(function(l){ return state.filter==="all" || l.status===state.filter; });
+    if(!list.length){ $("rows").innerHTML=""; $("empty").style.display="block";
+      $("empty").innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h10"/></svg><div>No leads in this view.</div>';
+      return;
+    }
+    $("empty").style.display = "none";
+    $("rows").innerHTML = list.map(function(l){
+      return '<tr>'+
+        '<td><div class="lead-name">'+esc(l.name)+'</div><a class="lead-email" href="mailto:'+esc(l.email)+'">'+esc(l.email)+'</a></td>'+
+        '<td class="hide-sm">'+(esc(l.company)||'<span style="color:#b8bdcc">—</span>')+'</td>'+
+        '<td class="hide-sm"><div class="lead-needs">'+(esc(l.needs)||'<span style="color:#b8bdcc">—</span>')+'</div></td>'+
+        '<td>'+statusSelect(l)+'</td>'+
+        '<td class="when">'+fmtDate(l.created_at)+'</td>'+
+      '</tr>';
+    }).join("");
+
+    Array.prototype.forEach.call($("rows").querySelectorAll("select.status"), function(sel){
+      sel.addEventListener("change", function(){ updateStatus(sel.getAttribute("data-id"), sel.value, sel); });
+    });
+  }
+
+  function statusSelect(l){
+    var opts = STATUSES.map(function(s){
+      return '<option value="'+s+'"'+(l.status===s?" selected":"")+'>'+cap(s)+'</option>';
+    }).join("");
+    return '<select class="status" data-id="'+l.id+'">'+opts+'</select>';
+  }
+
+  function updateStatus(id, status, sel){
+    sel.disabled = true;
+    fetch("/api/leads", {
+      method:"PATCH",
+      headers:{ "Content-Type":"application/json", "x-admin-token": token() },
+      body: JSON.stringify({ id: id, status: status })
+    }).then(function(r){ return r.json(); })
+      .then(function(){
+        var lead = state.leads.filter(function(x){ return x.id===id; })[0];
+        if(lead) lead.status = status;
+        renderStats(); toast("Status updated to “"+cap(status)+"”");
+      })
+      .catch(function(){ toast("Could not update — try again."); })
+      .finally(function(){ sel.disabled = false; });
+  }
+
+  // ---------- utils ----------
+  function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function fmtDate(iso){
+    if(!iso) return "—";
+    var d = new Date(iso); var now = new Date();
+    var diff = (now - d)/1000;
+    if(diff < 60) return "just now";
+    if(diff < 3600) return Math.floor(diff/60)+"m ago";
+    if(diff < 86400) return Math.floor(diff/3600)+"h ago";
+    return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+", "+d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
+  }
+
+  // ---------- boot ----------
+  if(token()) load(); else showGate("");
+})();
+</script>
+</body>
+</html>
