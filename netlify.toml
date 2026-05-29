@@ -1,0 +1,30 @@
+# =============================================================
+#  Netlify configuration for Crypto Reco
+# =============================================================
+
+[build]
+  # Static site files live at the repo root (index.html, styles.css, app.js, admin/)
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Pretty API paths -> Netlify Functions (so the front-end keeps using /api/*)
+[[redirects]]
+  from = "/api/lead"
+  to = "/.netlify/functions/lead"
+  status = 200
+
+[[redirects]]
+  from = "/api/leads"
+  to = "/.netlify/functions/leads"
+  status = 200
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
