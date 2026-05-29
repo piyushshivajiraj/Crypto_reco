@@ -1,0 +1,11 @@
+{
+  "name": "crypto-reco",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Crypto Reco marketing site + lead-capture pipeline (Website Form -> Database/CRM -> Automated Workflow) on Netlify",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "resend": "^4.0.1"
+  }
+}
